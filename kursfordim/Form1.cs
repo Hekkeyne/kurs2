@@ -170,7 +170,7 @@ namespace kursfordim
                         string[] parts = lines[i].Split('|');
                         if (parts.Length >= 3)
                         {
-                            oilsTable.Rows.Add(parts[0], decimal.Parse(parts[1]), decimal.Parse(parts[2]));
+                            oilsTable.Rows.Add(parts[0].Trim(), decimal.Parse(parts[1].Trim()), decimal.Parse(parts[2].Trim()));
                         }
                         i++;
                     }
@@ -179,17 +179,18 @@ namespace kursfordim
                     i++;
 
                     // Читаем станки (строка после пустой)
+                    i++;
                     while (i < lines.Length)
                     {
                         string[] parts = lines[i].Split('|');
                         if (parts.Length >= 5)
                         {
                             machinesTable.Rows.Add(
-                                parts[0],
-                                int.Parse(parts[1]),
-                                parts[2],
-                                decimal.Parse(parts[3]),
-                                decimal.Parse(parts[4]));
+                                parts[0].Trim(),
+                                int.Parse(parts[1].Trim()),
+                                parts[2].Trim(),
+                                decimal.Parse(parts[3].Trim()),
+                                decimal.Parse(parts[4].Trim()));
                         }
                         i++;
                     }
@@ -215,7 +216,7 @@ namespace kursfordim
                     List<string> lines = new List<string>();
 
                     // Экспорт масел
-                    lines.Add("Марка масла|Количество|Цена");
+                    lines.Add("Марка масла|Количество на складе|Цена");
                     foreach (DataRow row in oilsTable.Rows)
                     {
                         lines.Add($"{row["Марка масла"]}|{row["Количество на складе"]}|{row["Стоимость за единицу"]}");
