@@ -25,9 +25,25 @@ namespace kursfordim
             dataGridViewMachines.ColumnAdded += (s, e) => UpdateControlsPosition();
             Resize += (s, e) => UpdateControlsPosition();
         }
-        private void dataGridViewMachines_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        private void InitializeMachineTypeDropdown()
         {
-            if (dataGridViewMachines.CurrentCell.ColumnIndex == 1) 
+            // Define the machine types you want in the dropdown
+            string[] machineTypes = { "Токарный", "Фрезерный", "Сверлильный", "Шлифовальный", "Фрезерно-токарный" };
+
+            // Create a DataGridViewComboBoxColumn for the machine type
+            DataGridViewComboBoxColumn machineTypeColumn = new DataGridViewComboBoxColumn();
+            machineTypeColumn.HeaderText = "Тип станка";
+            machineTypeColumn.Name = "Тип станка";
+            machineTypeColumn.DataPropertyName = "Тип станка";
+            machineTypeColumn.DataSource = machineTypes;
+
+            // Replace the existing column with our combo box column
+            dataGridViewMachines.Columns.Remove("Тип станка");
+            dataGridViewMachines.Columns.Insert(0, machineTypeColumn);
+        }
+        private void dataGridViewOils_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dataGridViewOils.CurrentCell.ColumnIndex == 1) 
             {
                 if (e.Control is System.Windows.Forms.ComboBox combo)
                 {
@@ -60,7 +76,6 @@ namespace kursfordim
             {
                 tb.KeyPress += oil_KeyPress;
             }
-
         }
         private void proverkamachine(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
@@ -111,22 +126,6 @@ namespace kursfordim
             oilsTable.Columns.Add("Стоимость за единицу", typeof(decimal));
 
             dataGridViewOils.DataSource = oilsTable;
-        }
-        private void InitializeMachineTypeDropdown()
-        {
-            // Define the machine types you want in the dropdown
-            string[] machineTypes = { "Токарный", "Фрезерный", "Сверлильный", "Шлифовальный", "Фрезерно-токарный" };
-
-            // Create a DataGridViewComboBoxColumn for the machine type
-            DataGridViewComboBoxColumn machineTypeColumn = new DataGridViewComboBoxColumn();
-            machineTypeColumn.HeaderText = "Тип станка";
-            machineTypeColumn.Name = "Тип станка";
-            machineTypeColumn.DataPropertyName = "Тип станка";
-            machineTypeColumn.DataSource = machineTypes;
-
-            // Replace the existing column with our combo box column
-            dataGridViewMachines.Columns.Remove("Тип станка");
-            dataGridViewMachines.Columns.Insert(0, machineTypeColumn);
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
