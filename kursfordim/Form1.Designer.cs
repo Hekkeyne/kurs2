@@ -49,21 +49,25 @@ namespace kursfordim
             // 
             // dataGridViewMachines
             // 
+            dataGridViewMachines.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewMachines.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dataGridViewMachines.Location = new Point(14, 42);
             dataGridViewMachines.Margin = new Padding(4, 3, 4, 3);
             dataGridViewMachines.Name = "dataGridViewMachines";
-            dataGridViewMachines.Size = new Size(700, 173);
+            dataGridViewMachines.Size = new Size(700, 200);
             dataGridViewMachines.TabIndex = 0;
+            dataGridViewMachines.EditingControlShowing += proverkamachine;
             // 
             // dataGridViewOils
             // 
+            dataGridViewOils.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             dataGridViewOils.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewOils.Location = new Point(14, 260);
+            dataGridViewOils.Location = new Point(14, 280);
             dataGridViewOils.Margin = new Padding(4, 3, 4, 3);
             dataGridViewOils.Name = "dataGridViewOils";
-            dataGridViewOils.Size = new Size(700, 173);
+            dataGridViewOils.Size = new Size(700, 150);
             dataGridViewOils.TabIndex = 1;
+            dataGridViewOils.EditingControlShowing += proverkaoil;
             // 
             // label1
             // 
@@ -78,7 +82,7 @@ namespace kursfordim
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(14, 241);
+            label2.Location = new Point(14, 260);
             label2.Margin = new Padding(4, 0, 4, 0);
             label2.Name = "label2";
             label2.Size = new Size(120, 15);
@@ -87,6 +91,7 @@ namespace kursfordim
             // 
             // btnCalculate
             // 
+            btnCalculate.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             btnCalculate.Location = new Point(721, 42);
             btnCalculate.Margin = new Padding(4, 3, 4, 3);
             btnCalculate.Name = "btnCalculate";
@@ -98,6 +103,7 @@ namespace kursfordim
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label3.AutoSize = true;
             label3.Location = new Point(721, 115);
             label3.Margin = new Padding(4, 0, 4, 0);
@@ -108,6 +114,7 @@ namespace kursfordim
             // 
             // txtTotalPlanCost
             // 
+            txtTotalPlanCost.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtTotalPlanCost.Location = new Point(721, 134);
             txtTotalPlanCost.Margin = new Padding(4, 3, 4, 3);
             txtTotalPlanCost.Name = "txtTotalPlanCost";
@@ -117,6 +124,7 @@ namespace kursfordim
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label4.AutoSize = true;
             label4.Location = new Point(721, 173);
             label4.Margin = new Padding(4, 0, 4, 0);
@@ -127,6 +135,7 @@ namespace kursfordim
             // 
             // txtTotalActualCost
             // 
+            txtTotalActualCost.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtTotalActualCost.Location = new Point(721, 192);
             txtTotalActualCost.Margin = new Padding(4, 3, 4, 3);
             txtTotalActualCost.Name = "txtTotalActualCost";
@@ -136,6 +145,7 @@ namespace kursfordim
             // 
             // label5
             // 
+            label5.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label5.AutoSize = true;
             label5.Location = new Point(721, 231);
             label5.Margin = new Padding(4, 0, 4, 0);
@@ -146,6 +156,7 @@ namespace kursfordim
             // 
             // txtMinCost
             // 
+            txtMinCost.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtMinCost.Location = new Point(721, 249);
             txtMinCost.Margin = new Padding(4, 3, 4, 3);
             txtMinCost.Name = "txtMinCost";
@@ -155,6 +166,7 @@ namespace kursfordim
             // 
             // label6
             // 
+            label6.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label6.AutoSize = true;
             label6.Location = new Point(721, 288);
             label6.Margin = new Padding(4, 0, 4, 0);
@@ -165,6 +177,7 @@ namespace kursfordim
             // 
             // txtMaxCost
             // 
+            txtMaxCost.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             txtMaxCost.Location = new Point(721, 307);
             txtMaxCost.Margin = new Padding(4, 3, 4, 3);
             txtMaxCost.Name = "txtMaxCost";
@@ -174,6 +187,7 @@ namespace kursfordim
             // 
             // label7
             // 
+            label7.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             label7.AutoSize = true;
             label7.Location = new Point(721, 346);
             label7.Margin = new Padding(4, 0, 4, 0);
@@ -184,6 +198,7 @@ namespace kursfordim
             // 
             // listBoxOilByStockCost
             // 
+            listBoxOilByStockCost.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Right;
             listBoxOilByStockCost.FormattingEnabled = true;
             listBoxOilByStockCost.ItemHeight = 15;
             listBoxOilByStockCost.Location = new Point(721, 365);
@@ -194,6 +209,7 @@ namespace kursfordim
             // 
             // btnRandomFill
             // 
+            btnRandomFill.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnRandomFill.Location = new Point(14, 440);
             btnRandomFill.Margin = new Padding(4, 3, 4, 3);
             btnRandomFill.Name = "btnRandomFill";
@@ -205,6 +221,7 @@ namespace kursfordim
             // 
             // btnImport
             // 
+            btnImport.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnImport.Location = new Point(196, 440);
             btnImport.Margin = new Padding(4, 3, 4, 3);
             btnImport.Name = "btnImport";
@@ -216,6 +233,7 @@ namespace kursfordim
             // 
             // btnExport
             // 
+            btnExport.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
             btnExport.Location = new Point(378, 440);
             btnExport.Margin = new Padding(4, 3, 4, 3);
             btnExport.Name = "btnExport";
@@ -288,6 +306,7 @@ namespace kursfordim
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
             Margin = new Padding(4, 3, 4, 3);
+            MinimumSize = new Size(800, 500);
             Name = "Form1";
             Text = "Учет технических масел для станков";
             Load += Form1_Load;

@@ -4,6 +4,7 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace kursfordim
 {
@@ -17,8 +18,67 @@ namespace kursfordim
         {
             InitializeComponent();
             InitializeDataTables();
+            dataGridViewOils.RowsAdded += (s, e) => UpdateControlsPosition();
+            dataGridViewOils.ColumnAdded += (s, e) => UpdateControlsPosition();
+            dataGridViewMachines.RowsAdded += (s, e) => UpdateControlsPosition();
+            dataGridViewMachines.ColumnAdded += (s, e) => UpdateControlsPosition();
+            Resize += (s, e) => UpdateControlsPosition();
         }
-
+        private void UpdateControlsPosition()
+        {
+            int datawidth = dataGridViewMachines.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + dataGridViewMachines.RowHeadersWidth + 10;
+            int dataheight = dataGridViewMachines.Rows.GetRowsHeight(DataGridViewElementStates.Visible) + dataGridViewMachines.ColumnHeadersHeight + 10;
+            int maxwidth = ClientSize.Width - dataGridViewMachines.Left - 20;
+            int maxheight = ClientSize.Height - dataGridViewMachines.Top - 20;
+            dataGridViewMachines.Size = new Size(
+                Math.Min(datawidth, Math.Max(100, maxwidth)),
+                Math.Min(dataheight, Math.Max(100, maxheight))
+            );
+            datawidth = dataGridViewOils.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + dataGridViewOils.RowHeadersWidth + 10;
+            dataheight = dataGridViewOils.Rows.GetRowsHeight(DataGridViewElementStates.Visible) + dataGridViewOils.ColumnHeadersHeight + 10;
+            maxwidth = ClientSize.Width - dataGridViewOils.Left - 20;
+            maxheight = ClientSize.Height - dataGridViewOils.Top - 20;
+            dataGridViewOils.Size = new Size(
+                Math.Min(datawidth, Math.Max(100, maxwidth)),
+                Math.Min(dataheight, Math.Max(100, maxheight))
+            );
+        }
+        private void proverkaoil(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is System.Windows.Forms.TextBox tb)
+            {
+                tb.KeyPress += oil_KeyPress;
+            }
+        }
+        private void proverkamachine(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (e.Control is System.Windows.Forms.TextBox tb)
+            {
+                tb.KeyPress += machine_KeyPress;
+            }
+        }
+        private void oil_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            DataGridView d = dataGridViewOils;
+            if (d.CurrentCell.ColumnIndex == 1 || d.CurrentCell.ColumnIndex == 2)
+            {
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+        private void machine_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            DataGridView d = dataGridViewMachines;
+            if (d.CurrentCell.ColumnIndex == 1 || d.CurrentCell.ColumnIndex == 3 || d.CurrentCell.ColumnIndex == 4)
+            {
+                if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
         private void InitializeDataTables()
         {
             // Таблица станков
