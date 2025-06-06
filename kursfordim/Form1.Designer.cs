@@ -57,6 +57,8 @@ namespace kursfordim
             dataGridViewMachines.Size = new Size(700, 200);
             dataGridViewMachines.TabIndex = 0;
             dataGridViewMachines.EditingControlShowing += proverkamachine;
+            dataGridViewMachines.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewMachines.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             // 
             // dataGridViewOils
             // 
@@ -68,6 +70,8 @@ namespace kursfordim
             dataGridViewOils.Size = new Size(700, 150);
             dataGridViewOils.TabIndex = 1;
             dataGridViewOils.EditingControlShowing += proverkaoil;
+            dataGridViewOils.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
+            dataGridViewOils.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
             // 
             // label1
             // 

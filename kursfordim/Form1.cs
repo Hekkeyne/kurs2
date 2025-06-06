@@ -16,6 +16,7 @@ namespace kursfordim
 
         public Form1()
         {
+
             InitializeComponent();
             InitializeDataTables();
             dataGridViewOils.RowsAdded += (s, e) => UpdateControlsPosition();
@@ -24,23 +25,33 @@ namespace kursfordim
             dataGridViewMachines.ColumnAdded += (s, e) => UpdateControlsPosition();
             Resize += (s, e) => UpdateControlsPosition();
         }
+        private void dataGridViewMachines_EditingControlShowing(object sender, DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dataGridViewMachines.CurrentCell.ColumnIndex == 1) 
+            {
+                if (e.Control is System.Windows.Forms.ComboBox combo)
+                {
+                    combo.Items.Clear();
+                    combo.Items.AddRange(new object[] { "Масло A", "Масло B", "Масло C" });
+                }
+            }
+        }
         private void UpdateControlsPosition()
         {
-            int datawidth = dataGridViewMachines.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + dataGridViewMachines.RowHeadersWidth + 10;
-            int dataheight = dataGridViewMachines.Rows.GetRowsHeight(DataGridViewElementStates.Visible) + dataGridViewMachines.ColumnHeadersHeight + 10;
-            int maxwidth = ClientSize.Width - dataGridViewMachines.Left - 20;
-            int maxheight = ClientSize.Height - dataGridViewMachines.Top - 20;
+            int spacing = 10;
+            int minHeight = 100;
+            int bottomYOfMachines = btnCalculate.Bottom + spacing;
+            int availableHeightForMachines = dataGridViewOils.Top - dataGridViewMachines.Top - spacing;
+            int maxWidth = ClientSize.Width - dataGridViewMachines.Left - 200;
+
             dataGridViewMachines.Size = new Size(
-                Math.Min(datawidth, Math.Max(100, maxwidth)),
-                Math.Min(dataheight, Math.Max(100, maxheight))
+                Math.Max(100, maxWidth),
+                Math.Max(minHeight, availableHeightForMachines)
             );
-            datawidth = dataGridViewOils.Columns.GetColumnsWidth(DataGridViewElementStates.Visible) + dataGridViewOils.RowHeadersWidth + 10;
-            dataheight = dataGridViewOils.Rows.GetRowsHeight(DataGridViewElementStates.Visible) + dataGridViewOils.ColumnHeadersHeight + 10;
-            maxwidth = ClientSize.Width - dataGridViewOils.Left - 20;
-            maxheight = ClientSize.Height - dataGridViewOils.Top - 20;
+            int availableHeightForOils = btnRandomFill.Top - dataGridViewOils.Top - spacing;
             dataGridViewOils.Size = new Size(
-                Math.Min(datawidth, Math.Max(100, maxwidth)),
-                Math.Min(dataheight, Math.Max(100, maxheight))
+                Math.Max(100, maxWidth),
+                Math.Max(minHeight, availableHeightForOils)
             );
         }
         private void proverkaoil(object sender, DataGridViewEditingControlShowingEventArgs e)
@@ -49,6 +60,7 @@ namespace kursfordim
             {
                 tb.KeyPress += oil_KeyPress;
             }
+
         }
         private void proverkamachine(object sender, DataGridViewEditingControlShowingEventArgs e)
         {
@@ -90,6 +102,7 @@ namespace kursfordim
             machinesTable.Columns.Add("Фактический расход", typeof(decimal));
 
             dataGridViewMachines.DataSource = machinesTable;
+            InitializeMachineTypeDropdown(); // Add this line
 
             // Таблица масел
             oilsTable = new DataTable();
@@ -98,6 +111,22 @@ namespace kursfordim
             oilsTable.Columns.Add("Стоимость за единицу", typeof(decimal));
 
             dataGridViewOils.DataSource = oilsTable;
+        }
+        private void InitializeMachineTypeDropdown()
+        {
+            // Define the machine types you want in the dropdown
+            string[] machineTypes = { "Токарный", "Фрезерный", "Сверлильный", "Шлифовальный", "Фрезерно-токарный" };
+
+            // Create a DataGridViewComboBoxColumn for the machine type
+            DataGridViewComboBoxColumn machineTypeColumn = new DataGridViewComboBoxColumn();
+            machineTypeColumn.HeaderText = "Тип станка";
+            machineTypeColumn.Name = "Тип станка";
+            machineTypeColumn.DataPropertyName = "Тип станка";
+            machineTypeColumn.DataSource = machineTypes;
+
+            // Replace the existing column with our combo box column
+            dataGridViewMachines.Columns.Remove("Тип станка");
+            dataGridViewMachines.Columns.Insert(0, machineTypeColumn);
         }
 
         private void btnCalculate_Click(object sender, EventArgs e)
@@ -114,17 +143,23 @@ namespace kursfordim
 
             foreach (DataRow machineRow in machinesTable.Rows)
             {
-                string oilBrand = machineRow["Марка масла"].ToString();
-                decimal planConsumption = Convert.ToDecimal(machineRow["Плановый расход"]);
-                decimal actualConsumption = Convert.ToDecimal(machineRow["Фактический расход"]);
-                int machineCount = Convert.ToInt32(machineRow["Количество"]);
-
-                DataRow[] oilRows = oilsTable.Select($"[Марка масла] = '{oilBrand}'");
-                if (oilRows.Length > 0)
+                try
                 {
-                    decimal oilPrice = Convert.ToDecimal(oilRows[0]["Стоимость за единицу"]);
-                    totalPlanCost += planConsumption * oilPrice * machineCount;
-                    totalActualCost += actualConsumption * oilPrice * machineCount;
+                    string oilBrand = machineRow["Марка масла"].ToString();
+                    decimal planConsumption = Convert.ToDecimal(machineRow["Плановый расход"]);
+                    decimal actualConsumption = Convert.ToDecimal(machineRow["Фактический расход"]);
+                    int machineCount = Convert.ToInt32(machineRow["Количество"]);
+
+                    DataRow[] oilRows = oilsTable.Select($"[Марка масла] = '{oilBrand}'");
+                    if (oilRows.Length > 0)
+                    {
+                        decimal oilPrice = Convert.ToDecimal(oilRows[0]["Стоимость за единицу"]);
+                        totalPlanCost += planConsumption * oilPrice * machineCount;
+                        totalActualCost += actualConsumption * oilPrice * machineCount;
+                    }
+                }
+                catch 
+                { 
                 }
             }
 
@@ -138,16 +173,23 @@ namespace kursfordim
 
             foreach (DataRow machineRow in machinesTable.Rows)
             {
-                string oilBrand = machineRow["Марка масла"].ToString();
-                decimal actualConsumption = Convert.ToDecimal(machineRow["Фактический расход"]);
-                int machineCount = Convert.ToInt32(machineRow["Количество"]);
-
-                DataRow[] oilRows = oilsTable.Select($"[Марка масла] = '{oilBrand}'");
-                if (oilRows.Length > 0)
+                try
                 {
-                    decimal oilPrice = Convert.ToDecimal(oilRows[0]["Стоимость за единицу"]);
-                    decimal cost = actualConsumption * oilPrice * machineCount;
-                    costs.Add(cost);
+                    string oilBrand = machineRow["Марка масла"].ToString();
+                    decimal actualConsumption = Convert.ToDecimal(machineRow["Фактический расход"]);
+                    int machineCount = Convert.ToInt32(machineRow["Количество"]);
+
+                    DataRow[] oilRows = oilsTable.Select($"[Марка масла] = '{oilBrand}'");
+                    if (oilRows.Length > 0)
+                    {
+                        decimal oilPrice = Convert.ToDecimal(oilRows[0]["Стоимость за единицу"]);
+                        decimal cost = actualConsumption * oilPrice * machineCount;
+                        costs.Add(cost);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Ошибка!");
                 }
             }
 
@@ -198,7 +240,7 @@ namespace kursfordim
             for (int i = 0; i < 5; i++)
             {
                 machinesTable.Rows.Add(
-                    machineTypes[i],
+                    machineTypes[random.Next(machineTypes.Length)], // Use random machine type from the array
                     random.Next(1, 10), // Количество станков
                     oilBrands[random.Next(oilBrands.Length)], // Марка масла
                     Math.Round(random.Next(1, 20) + random.NextDouble(), 2), // Плановый расход
